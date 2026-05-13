@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ignite Daily — Fuel Your Fire</title>
+<meta name="description" content="Receive daily, weekly, and monthly motivational quotes and YouTube videos straight to your inbox. Free. Curated. Powerful.">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+<!-- EmailJS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<style>
+/* ============================================
+   CSS CUSTOM PROPERTIES & THEMES
+   ============================================ */
+:root {
+  /* Default: Ember theme */
+  --bg-primary: #0a0805;
+  --bg-secondary: #120e08;
+  --bg-card: #1a1410;
+  --accent-1: #f97316;
+  --accent-2: #fbbf24;
+  --accent-3: #ef4444;
+  --text-primary: #fef3e2;
+  --text-secondary: #d4a76a;
+  --text-muted: #7a5c3a;
+  --border: rgba(249,115,22,0.2);
+  --glow: rgba(249,115,22,0.15);
+  --particle-color: #f97316;
+  --gradient-hero: radial-gradient(ellipse at 60% 20%, rgba(249,115,22,0.25) 0%, transparent 60%),
+                   radial-gradient(ellipse at 20% 80%, rgba(251,191,36,0.15) 0%, transparent 50%),
+                   radial-gradient(ellipse at 80% 70%, rgba(239,68,68,0.1) 0%, transparent 40%);
+}
+
+[data-theme="ocean"] {
+  --bg-primary: #020b18;
+  --bg-secondary: #041225;
+  --bg-card: #061830;
+  --accent-1: #38bdf8;
+  --accent-2: #818cf8;
+  --accent-3: #34d399;
+  --text-primary: #e0f2fe;
+  --text-secondary: #7dd3fc;
+  --text-muted: #3b82a0;
+  --border: rgba(56,189,248,0.2);
+  --glow: rgba(56,189,248,0.12);
+  --particle-color: #38bdf8;
+  --gradient-hero: radial-gradient(ellipse at 60% 20%, rgba(56,189,248,0.2) 0%, transparent 60%),
+                   radial-gradient(ellipse at 20% 80%, rgba(129,140,248,0.15) 0%, transparent 50%),
+                   radial-gradient(ellipse at 80% 70%, rgba(52,211,153,0.1) 0%, transparent 40%);
+}
+
+[data-theme="forest"] {
+  --bg-primary: #020e06;
+  --bg-secondary: #041408;
+  --bg-card: #071a0c;
+  --accent-1: #4ade80;
+  --accent-2: #86efac;
+  --accent-3: #facc15;
+  --text-primary: #f0fdf4;
+  --text-secondary: #86efac;
+  --text-muted: #3a7a4a;
+  --border: rgba(74,222,128,0.2);
+  --glow: rgba(74,222,128,0.12);
+  --particle-color: #4ade80;
+  --gradient-hero: radial-gradient(ellipse at 60% 20%, rgba(74,222,128,0.2) 0%, transparent 60%),
+                   radial-gradient(ellipse at 20% 80%, rgba(134,239,172,0.15) 0%, transparent 50%),
+                   radial-gradient(ellipse at 80% 70%, rgba(250,204,21,0.1) 0%, transparent 40%);
+}
+
+[data-theme="dawn"] {
+  --bg-primary: #fdf8f0;
+  --bg-secondary: #fef3e2;
+  --bg-card: #fff8ed;
+  --accent-1: #9333ea;
+  --accent-2: #ec4899;
+  --accent-3: #f97316;
+  --text-primary: #1c0a2e;
+  --text-secondary: #7c3aed;
+  --text-muted: #a78bca;
+  --border: rgba(147,51,234,0.2);
+  --glow: rgba(147,51,234,0.08);
+  --particle-color: #9333ea;
+  --gradient-hero: radial-gradient(ellipse at 60% 20%, rgba(147,51,234,0.12) 0%, transparent 60%),
+                   radial-gradient(ellipse at 20% 80%, rgba(236,72,153,0.1) 0%, transparent 50%),
+                   radial-gradient(ellipse at 80% 70%, rgba(249,115,22,0.08) 0%, transparent 40%);
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.6s ease, color 0.4s ease;
+  cursor: none;
+}
+
+/* ============================================
+   CUSTOM CURSOR
+   ============================================ */
+.cursor-dot {
+  width: 8px; height: 8px;
+  background: var(--accent-1);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, width 0.2s, height 0.2s, background 0.3s;
+}
+
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1.5px solid var(--accent-1);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s ease, width 0.25s, height 0.25s, border-color 0.3s, opacity 0.3s;
+  opacity: 0.6;
+}
+
+body:has(a:hover) .cursor-ring,
+body:has(button:hover) .cursor-ring,
+body:has(input:hover) .cursor-ring {
+  width: 48px; height: 48px;
+  opacity: 0.9;
+}
+
+/* ============================================
+   CANVAS BACKGROUND
+   ============================================ */
+#particle-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ============================================
+   NOISE TEXTURE OVERLAY
+   ============================================ */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.wrapper {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(0,0,0,0.1);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.4s ease;
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.nav-logo span {
+  color: var(--accent-1);
+}
+
+.theme-switcher {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.theme-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+.theme-btn:hover { transform: scale(1.2); }
+.theme-btn.active { border-color: var(--text-primary); }
+.theme-btn[data-t="ember"] { background: linear-gradient(135deg, #f97316, #ef4444); }
+.theme-btn[data-t="ocean"] { background: linear-gradient(135deg, #38bdf8, #818cf8); }
+.theme-btn[data-t="forest"] { background: linear-gradient(135deg, #4ade80, #facc15); }
+.theme-btn[data-t="dawn"] { background: linear-gradient(135deg, #9333ea, #ec4899); }
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  background: var(--gradient-hero);
+  transition: background 0.6s ease;
+}
+
+.hero-eyebrow {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-1);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s 0.3s forwards;
+}
+
+.hero-title {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  max-width: 900px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.9s 0.5s forwards;
+}
+
+.hero-title em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  font-weight: 300;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s 0.7s forwards;
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 1.5s forwards;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--accent-1), transparent);
+  animation: scrollPulse 1.8s ease-in-out infinite;
+}
+
+.scroll-text {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: 'Syne', sans-serif;
+}
+
+/* ============================================
+   QUOTE TICKER
+   ============================================ */
+.quote-ticker-section {
+  padding: 4rem 0;
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+  position: relative;
+  z-index: 2;
+}
+
+.ticker-track {
+  display: flex;
+  gap: 4rem;
+  animation: ticker 40s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.ticker-track:hover { animation-play-state: paused; }
+
+.ticker-item {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  padding: 0 2rem;
+}
+
+.ticker-item span {
+  color: var(--accent-1);
+  font-style: normal;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-left: 1rem;
+  vertical-align: middle;
+}
+
+/* ============================================
+   SUBSCRIBE SECTION
+   ============================================ */
+.subscribe-section {
+  padding: 7rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.section-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-1);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+.subscribe-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+  margin-top: 4rem;
+}
+
+@media (max-width: 768px) {
+  .subscribe-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .hero-title { font-size: 3.2rem; }
+}
+
+.subscribe-left p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.feature-icon {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--glow);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.feature-icon svg {
+  width: 12px; height: 12px;
+  stroke: var(--accent-1);
+  fill: none;
+  stroke-width: 2.5;
+}
+
+/* ============================================
+   SUBSCRIPTION FORM
+   ============================================ */
+.form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.form-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-1), transparent);
+  opacity: 0.6;
+}
+
+.form-card:hover {
+  border-color: rgba(var(--accent-1-rgb, 249,115,22), 0.4);
+  box-shadow: 0 0 60px var(--glow);
+}
+
+.form-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+  cursor: none;
+}
+
+.form-input::placeholder { color: var(--text-muted); }
+
+.form-input:focus {
+  border-color: var(--accent-1);
+  background: rgba(255,255,255,0.07);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+
+/* Radio group for frequency */
+.radio-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.radio-option {
+  position: relative;
+}
+
+.radio-option input {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+}
+
+.radio-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s ease;
+  background: rgba(255,255,255,0.03);
+}
+
+.radio-label:hover {
+  border-color: var(--accent-1);
+  background: var(--glow);
+}
+
+.radio-option input:checked + .radio-label {
+  border-color: var(--accent-1);
+  background: var(--glow);
+  color: var(--accent-1);
+  box-shadow: 0 0 20px var(--glow);
+}
+
+.radio-icon {
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.radio-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Honeypot - invisible to humans */
+.hp-field { 
+  position: absolute; 
+  left: -9999px; 
+  opacity: 0; 
+  pointer-events: none;
+  tab-index: -1;
+  height: 0;
+}
+
+/* Submit Button */
+.btn-submit {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  color: #000;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: rgba(255,255,255,0.25);
+  transform: skewX(-20deg);
+  transition: left 0.4s ease;
+}
+
+.btn-submit:hover::before { left: 100%; }
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--glow); }
+.btn-submit:active { transform: translateY(0); }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* Form Messages */
+.form-message {
+  display: none;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.form-message.success {
+  display: block;
+  background: rgba(74,222,128,0.1);
+  border: 1px solid rgba(74,222,128,0.3);
+  color: #4ade80;
+}
+
+.form-message.error {
+  display: block;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #f87171;
+}
+
+.form-message.warning {
+  display: block;
+  background: rgba(251,191,36,0.1);
+  border: 1px solid rgba(251,191,36,0.3);
+  color: #fbbf24;
+}
+
+/* Security badge */
+.security-badges {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: 'Syne', sans-serif;
+}
+
+.badge svg {
+  width: 12px; height: 12px;
+  stroke: var(--accent-2);
+  fill: none;
+  stroke-width: 2;
+}
+
+/* ============================================
+   QUOTES SHOWCASE SECTION
+   ============================================ */
+.quotes-section {
+  padding: 7rem 0;
+  position: relative;
+  z-index: 2;
+  background: var(--bg-secondary);
+}
+
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3.5rem;
+}
+
+.quote-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.quote-card.visible {
+  animation: cardReveal 0.6s ease forwards;
+}
+
+.quote-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px var(--glow);
+  border-color: var(--accent-1);
+}
+
+.quote-card::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.5rem; left: 1.2rem;
+  font-family: 'Instrument Serif', serif;
+  font-size: 6rem;
+  color: var(--accent-1);
+  opacity: 0.15;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.quote-text {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.quote-author {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-1);
+}
+
+.quote-tag {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  background: var(--glow);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-family: 'Syne', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ============================================
+   YOUTUBE SECTION
+   ============================================ */
+.video-section {
+  padding: 7rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3.5rem;
+}
+
+.video-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.video-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px var(--glow);
+}
+
+.video-thumb {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: var(--bg-secondary);
+  overflow: hidden;
+}
+
+.video-thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  filter: brightness(0.85);
+}
+
+.video-card:hover .video-thumb img { transform: scale(1.05); filter: brightness(1); }
+
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.3);
+  transition: background 0.3s;
+}
+
+.video-card:hover .play-overlay { background: rgba(0,0,0,0.1); }
+
+.play-btn {
+  width: 52px; height: 52px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background 0.2s;
+}
+
+.video-card:hover .play-btn {
+  transform: scale(1.1);
+  background: white;
+}
+
+.play-btn svg {
+  width: 18px; height: 18px;
+  fill: #000;
+  margin-left: 3px;
+}
+
+.video-info { padding: 1.2rem; }
+
+.video-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.video-channel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   STATS SECTION
+   ============================================ */
+.stats-section {
+  padding: 5rem 0;
+  background: var(--bg-secondary);
+  position: relative;
+  z-index: 2;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
+  text-align: center;
+}
+
+.stat-item {
+  padding: 2rem 1rem;
+}
+
+.stat-number {
+  font-family: 'Instrument Serif', serif;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.stat-number span {
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  padding: 3rem 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.footer-logo span { color: var(--accent-1); }
+
+.footer-tagline {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+  margin-bottom: 1.5rem;
+}
+
+.footer-links a {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--accent-1); }
+
+.footer-copy {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid rgba(0,0,0,0.3);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+/* ============================================
+   TOAST NOTIFICATION
+   ============================================ */
+.toast-container {
+  position: fixed;
+  top: 5rem; right: 1.5rem;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.toast {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  max-width: 320px;
+  transform: translateX(120%);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.toast.show { transform: translateX(0); }
+.toast.success { border-color: rgba(74,222,128,0.4); }
+.toast.error { border-color: rgba(239,68,68,0.4); }
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.7); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes cardReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px var(--glow); }
+  50% { box-shadow: 0 0 50px var(--glow), 0 0 80px var(--glow); }
+}
+
+.float-anim { animation: float 4s ease-in-out infinite; }
+.pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+</style>
+</head>
+<body data-theme="ember">
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Particle Canvas -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ==========================================
+     NAVIGATION
+     ========================================== -->
+<nav>
+  <div class="nav-logo">Ignite<span>Daily</span></div>
+  <div class="theme-switcher" role="group" aria-label="Choose theme">
+    <button class="theme-btn active" data-t="ember" onclick="setTheme('ember')" title="Ember theme" aria-label="Ember theme"></button>
+    <button class="theme-btn" data-t="ocean" onclick="setTheme('ocean')" title="Ocean theme" aria-label="Ocean theme"></button>
+    <button class="theme-btn" data-t="forest" onclick="setTheme('forest')" title="Forest theme" aria-label="Forest theme"></button>
+    <button class="theme-btn" data-t="dawn" onclick="setTheme('dawn')" title="Dawn theme" aria-label="Dawn theme"></button>
+  </div>
+</nav>
+
+<!-- ==========================================
+     HERO
+     ========================================== -->
+<section class="hero" id="home">
+  <div class="wrapper" style="width:100%">
+    <div class="hero-eyebrow">✦ Free · Curated · Powerful</div>
+    <h1 class="hero-title">Feed Your Mind.<br><em>Ignite Your Fire.</em></h1>
+    <p class="hero-sub">Daily motivational quotes and curated YouTube videos, delivered straight to your inbox. Zero spam. Pure fuel.</p>
+    <a href="#subscribe" class="btn-submit" style="display:inline-block;width:auto;padding:1rem 2.5rem;text-decoration:none;border-radius:50px;font-size:0.9rem;opacity:0;animation:fadeUp 0.8s 0.9s forwards">
+      Start Your Journey →
+    </a>
+  </div>
+  <div class="hero-scroll-hint">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<!-- ==========================================
+     QUOTE TICKER
+     ========================================== -->
+<div class="quote-ticker-section" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack">
+    <!-- Filled by JS -->
+  </div>
+</div>
+
+<!-- ==========================================
+     SUBSCRIBE SECTION
+     ========================================== -->
+<section class="subscribe-section" id="subscribe">
+  <div class="wrapper">
+    <div class="section-label reveal">Join The Community</div>
+    <h2 class="section-title reveal">Your Daily Dose<br>of <em style="font-family:'Instrument Serif',serif;font-style:italic">Greatness</em></h2>
+
+    <div class="subscribe-grid">
+      <!-- Left: Benefits -->
+      <div class="subscribe-left reveal">
+        <p>Every subscriber gets a personalized, randomized selection of wisdom from the world's greatest minds — philosophers, athletes, leaders, and creators. No repeated messages. Ever.</p>
+
+        <ul class="feature-list">
+          <li>
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span><strong>Daily quotes</strong> — fresh motivation every morning, randomized just for you</span>
+          </li>
+          <li>
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span><strong>Weekly deep-dives</strong> — one powerful YouTube video to transform your week</span>
+          </li>
+          <li>
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span><strong>Monthly insights</strong> — curated collection + reflection prompts for growth</span>
+          </li>
+          <li>
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span><strong>Zero cost. Zero spam.</strong> Unsubscribe instantly at any time</span>
+          </li>
+          <li>
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span><strong>No data stored.</strong> Your email is used only to deliver content, never sold</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="reveal">
+        <div class="form-card pulse-glow" id="subscribeCard">
+          <div class="form-title">Begin Today</div>
+          <div class="form-subtitle">One email away from a better mindset.</div>
+
+          <form id="subscribeForm" novalidate>
+            <!-- Honeypot (anti-bot) -->
+            <div class="hp-field" aria-hidden="true">
+              <label for="hp_website">Website (leave blank)</label>
+              <input type="text" id="hp_website" name="hp_website" autocomplete="off" tabindex="-1">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="user_name">Your Name</label>
+              <input type="text" id="user_name" name="user_name" class="form-input"
+                placeholder="Enter your first name" autocomplete="given-name" required minlength="2" maxlength="50">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="user_email">Email Address</label>
+              <input type="email" id="user_email" name="user_email" class="form-input"
+                placeholder="you@example.com" autocomplete="email" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Delivery Frequency</label>
+              <div class="radio-group" role="radiogroup" aria-label="Delivery frequency">
+                <div class="radio-option">
+                  <input type="radio" id="freq_daily" name="frequency" value="Daily" checked>
+                  <label for="freq_daily" class="radio-label">
+                    <span class="radio-icon">☀️</span>
+                    <span class="radio-text">Daily</span>
+                  </label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="freq_weekly" name="frequency" value="Weekly">
+                  <label for="freq_weekly" class="radio-label">
+                    <span class="radio-icon">📅</span>
+                    <span class="radio-text">Weekly</span>
+                  </label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="freq_monthly" name="frequency" value="Monthly">
+                  <label for="freq_monthly" class="radio-label">
+                    <span class="radio-icon">🌙</span>
+                    <span class="radio-text">Monthly</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">
+              Ignite My Journey ✦
+            </button>
+
+            <div class="form-message" id="formMessage"></div>
+
+            <div class="security-badges">
+              <div class="badge">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Secure
+              </div>
+              <div class="badge">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                No Spam
+              </div>
+              <div class="badge">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Free Forever
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     SAMPLE QUOTES SHOWCASE
+     ========================================== -->
+<section class="quotes-section" id="quotes">
+  <div class="wrapper">
+    <div class="section-label reveal">What You'll Receive</div>
+    <h2 class="section-title reveal">Wisdom From The<br><em style="font-family:'Instrument Serif',serif;font-style:italic">Greatest Minds</em></h2>
+    <div class="quotes-grid" id="quotesGrid"></div>
+  </div>
+</section>
+
+<!-- ==========================================
+     VIDEO SECTION
+     ========================================== -->
+<section class="video-section" id="videos">
+  <div class="wrapper">
+    <div class="section-label reveal">YouTube Picks</div>
+    <h2 class="section-title reveal">Videos That <em style="font-family:'Instrument Serif',serif;font-style:italic">Move You</em></h2>
+    <div class="video-grid" id="videoGrid"></div>
+  </div>
+</section>
+
+<!-- ==========================================
+     STATS
+     ========================================== -->
+<section class="stats-section">
+  <div class="wrapper">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-number"><span id="countQuotes">0</span></div>
+        <div class="stat-label">Curated Quotes</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number"><span id="countVideos">0</span></div>
+        <div class="stat-label">Video Links</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number"><span>100%</span></div>
+        <div class="stat-label">Free Forever</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number"><span>0</span></div>
+        <div class="stat-label">Data Stored</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     FOOTER
+     ========================================== -->
+<footer>
+  <div class="footer-logo">Ignite<span>Daily</span></div>
+  <p class="footer-tagline">Your daily spark. Your eternal fire.</p>
+  <ul class="footer-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#subscribe">Subscribe</a></li>
+    <li><a href="#quotes">Quotes</a></li>
+    <li><a href="#videos">Videos</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 IgniteDaily · Built with purpose · No data collected</p>
+</footer>
+
+<!-- ==========================================
+     JAVASCRIPT
+     ========================================== -->
+<script>
+/* ============================================
+   EMAILJS CONFIG — REPLACE THESE VALUES
+   Get free account at emailjs.com
+   ============================================ */
+const EMAILJS_CONFIG = {
+  publicKey:  'YOUR_PUBLIC_KEY',     // From EmailJS → Account → API Keys
+  serviceId:  'YOUR_SERVICE_ID',     // From EmailJS → Email Services
+  templateId: 'YOUR_TEMPLATE_ID',   // From EmailJS → Email Templates
+};
+
+/* ============================================
+   DATA: QUOTES
+   ============================================ */
+const QUOTES = [
+  { text: "The secret of getting ahead is getting started.", author: "Mark Twain", tag: "Action" },
+  { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius", tag: "Persistence" },
+  { text: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis", tag: "Dreams" },
+  { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt", tag: "Belief" },
+  { text: "The only way to do great work is to love what you do.", author: "Steve Jobs", tag: "Purpose" },
+  { text: "Everything you've ever wanted is on the other side of fear.", author: "George Addair", tag: "Courage" },
+  { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill", tag: "Resilience" },
+  { text: "The mind is everything. What you think you become.", author: "Buddha", tag: "Mindset" },
+  { text: "An unexamined life is not worth living.", author: "Socrates", tag: "Reflection" },
+  { text: "Hard times never last but hard people do.", author: "Robert H. Schuller", tag: "Strength" },
+  { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson", tag: "Focus" },
+  { text: "You miss 100% of the shots you don't take.", author: "Wayne Gretzky", tag: "Action" },
+  { text: "The only limit to our realization of tomorrow will be our doubts of today.", author: "F.D. Roosevelt", tag: "Vision" },
+  { text: "Life is what happens when you're busy making other plans.", author: "John Lennon", tag: "Presence" },
+  { text: "Try not to become a man of success, but rather try to become a man of value.", author: "Albert Einstein", tag: "Values" },
+  { text: "I have not failed. I've just found 10,000 ways that won't work.", author: "Thomas Edison", tag: "Resilience" },
+  { text: "Darkness cannot drive out darkness; only light can do that.", author: "MLK Jr.", tag: "Hope" },
+  { text: "In the middle of every difficulty lies opportunity.", author: "Albert Einstein", tag: "Growth" },
+  { text: "It is during our darkest moments that we must focus to see the light.", author: "Aristotle", tag: "Strength" },
+  { text: "You only live once, but if you do it right, once is enough.", author: "Mae West", tag: "Life" },
+  { text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb", tag: "Action" },
+  { text: "Spread love everywhere you go. Let no one ever come to you without leaving happier.", author: "Mother Teresa", tag: "Kindness" },
+  { text: "When you reach the end of your rope, tie a knot in it and hang on.", author: "F.D. Roosevelt", tag: "Persistence" },
+  { text: "Always remember that you are absolutely unique. Just like everyone else.", author: "Margaret Mead", tag: "Identity" },
+  { text: "Do not go where the path may lead, go instead where there is no path and leave a trail.", author: "Emerson", tag: "Courage" },
+  { text: "You will face many defeats in life, but never let yourself be defeated.", author: "Maya Angelou", tag: "Resilience" },
+  { text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", author: "Nelson Mandela", tag: "Perseverance" },
+  { text: "In the end, it's not the years in your life that count. It's the life in your years.", author: "Abraham Lincoln", tag: "Life" },
+  { text: "Never let the fear of striking out keep you from playing the game.", author: "Babe Ruth", tag: "Courage" },
+  { text: "Twenty years from now you will be more disappointed by the things you didn't do.", author: "Mark Twain", tag: "Action" },
+];
+
+/* ============================================
+   DATA: YOUTUBE VIDEOS
+   ============================================ */
+const VIDEOS = [
+  { id: "mgmVOuLgFB0", title: "How to Stop Wasting Your Life", channel: "Better Than Yesterday" },
+  { id: "ZXsQAXx_ao0", title: "Dopamine Detox: Take Back Your Brain", channel: "Better Than Yesterday" },
+  { id: "H14bBuluwB8", title: "Why You Procrastinate Even When It Feels Bad", channel: "Psych2Go" },
+  { id: "_xSmkoxp8A0", title: "Start With Why — Simon Sinek", channel: "TED" },
+  { id: "lsSC2vx7zFQ", title: "Reprogram Your Mind — Bob Proctor", channel: "Proctor Gallagher" },
+  { id: "IiQtFVFjGKk", title: "The Power of Self-Discipline", channel: "Motivation2Study" },
+];
+
+/* ============================================
+   DISPOSABLE EMAIL DOMAINS (blocklist)
+   ============================================ */
+const BLOCKED_DOMAINS = [
+  'mailinator.com','guerrillamail.com','tempmail.com','throwaway.email',
+  'yopmail.com','trashmail.com','sharklasers.com','guerrillamailblock.com',
+  'grr.la','guerrillamail.info','spam4.me','10minutemail.com','dispostable.com',
+  'maildrop.cc','mailnull.com','spamgourmet.com','trashmail.at','trashmail.io',
+  'fakeinbox.com','nospamfor.us','spamfree24.org'
+];
+
+/* ============================================
+   RATE LIMITING
+   ============================================ */
+const RATE_LIMIT = { key: 'ignite_rl', maxPerHour: 3 };
+
+function checkRateLimit() {
+  try {
+    const now = Date.now();
+    const stored = JSON.parse(localStorage.getItem(RATE_LIMIT.key) || '[]');
+    const recent = stored.filter(ts => now - ts < 3600000);
+    if (recent.length >= RATE_LIMIT.maxPerHour) return false;
+    recent.push(now);
+    localStorage.setItem(RATE_LIMIT.key, JSON.stringify(recent));
+    return true;
+  } catch { return true; }
+}
+
+/* ============================================
+   EMAIL VALIDATION
+   ============================================ */
+function validateEmail(email) {
+  const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+  if (!regex.test(email)) return { ok: false, reason: 'Invalid email format.' };
+  const domain = email.split('@')[1].toLowerCase();
+  if (BLOCKED_DOMAINS.includes(domain)) return { ok: false, reason: 'Disposable email addresses are not allowed.' };
+  return { ok: true };
+}
+
+function validateName(name) {
+  if (!name || name.trim().length < 2) return { ok: false, reason: 'Please enter your name.' };
+  if (/[<>{}\\\/]/.test(name)) return { ok: false, reason: 'Name contains invalid characters.' };
+  return { ok: true };
+}
+
+/* ============================================
+   RANDOMIZED QUOTE PICKER
+   (Fisher-Yates shuffle, seeded to email hash)
+   ============================================ */
+function hashCode(str) {
+  let hash = 0;
+  for (let c of str) hash = (hash * 31 + c.charCodeAt(0)) | 0;
+  return Math.abs(hash);
+}
+
+function getRandomQuotes(email, count = 5) {
+  const seed = hashCode(email + new Date().toDateString());
+  const arr = [...QUOTES];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = (seed * (i + 7)) % (i + 1);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, count);
+}
+
+function getRandomVideos(email, count = 2) {
+  const seed = hashCode(email + 'vid' + new Date().toISOString().slice(0, 7));
+  const arr = [...VIDEOS];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = (seed * (i + 3)) % (i + 1);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, count);
+}
+
+/* ============================================
+   FORM LOAD TIMING (bot detection)
+   ============================================ */
+const formLoadTime = Date.now();
+
+/* ============================================
+   FORM SUBMISSION
+   ============================================ */
+document.getElementById('subscribeForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('formMessage');
+  msg.className = 'form-message';
+  msg.style.display = 'none';
+
+  // 1. Honeypot check
+  if (document.getElementById('hp_website').value.trim() !== '') {
+    return;
+  }
+
+  // 2. Timing check (bots fill forms too fast < 2 seconds)
+  if (Date.now() - formLoadTime < 2000) {
+    showMessage(msg, 'warning', 'Please slow down and try again.');
+    return;
+  }
+
+  // 3. Rate limit
+  if (!checkRateLimit()) {
+    showMessage(msg, 'error', '⏳ Too many requests. Please wait an hour before trying again.');
+    return;
+  }
+
+  // 4. Validate name
+  const name = document.getElementById('user_name').value.trim();
+  const nameCheck = validateName(name);
+  if (!nameCheck.ok) {
+    showMessage(msg, 'error', nameCheck.reason);
+    return;
+  }
+
+  // 5. Validate email
+  const email = document.getElementById('user_email').value.trim().toLowerCase();
+  const emailCheck = validateEmail(email);
+  if (!emailCheck.ok) {
+    showMessage(msg, 'error', emailCheck.reason);
+    return;
+  }
+
+  // 6. Get frequency
+  const frequency = document.querySelector('input[name="frequency"]:checked')?.value || 'Daily';
+
+  // 7. Build randomized content for email
+  const quotes = getRandomQuotes(email);
+  const videos = getRandomVideos(email);
+
+  const quoteBlock = quotes.map((q, i) =>
+    `${i+1}. "${q.text}" — ${q.author}`
+  ).join('\n\n');
+
+  const videoBlock = videos.map((v, i) =>
+    `Video ${i+1}: ${v.title}\nhttps://www.youtube.com/watch?v=${v.id}`
+  ).join('\n\n');
+
+  // 8. Send via EmailJS
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Sending...';
+
+  try {
+    await emailjs.init(EMAILJS_CONFIG.publicKey);
+    await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+      to_name: name,
+      to_email: email,
+      frequency: frequency,
+      quotes: quoteBlock,
+      videos: videoBlock,
+      unsubscribe_note: 'Reply STOP to unsubscribe at any time.',
+    });
+
+    showMessage(msg, 'success', `🔥 Welcome, ${name}! Check your inbox — your first dose of fire is on its way.`);
+    showToast(`Welcome aboard, ${name}! 🔥`, 'success');
+    this.reset();
+    document.querySelector(`input[name="frequency"][value="Daily"]`).checked = true;
+
+  } catch (err) {
+    console.error('EmailJS error:', err);
+    showMessage(msg, 'error', 'Oops — something went wrong. Please try again in a moment.');
+    showToast('Delivery failed. Try again.', 'error');
+    // Reverse rate limit on failure
+    try {
+      const stored = JSON.parse(localStorage.getItem(RATE_LIMIT.key) || '[]');
+      stored.pop();
+      localStorage.setItem(RATE_LIMIT.key, JSON.stringify(stored));
+    } catch {}
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Ignite My Journey ✦';
+  }
+});
+
+function showMessage(el, type, text) {
+  el.className = `form-message ${type}`;
+  el.textContent = text;
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ============================================
+   TOAST
+   ============================================ */
+function showToast(text, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = text;
+  container.appendChild(toast);
+  setTimeout(() => toast.classList.add('show'), 50);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 400);
+  }, 4500);
+}
+
+/* ============================================
+   THEME SWITCHER
+   ============================================ */
+function setTheme(theme) {
+  document.body.setAttribute('data-theme', theme);
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.t === theme);
+  });
+  // Update particle color
+  if (window.updateParticleColor) window.updateParticleColor();
+}
+
+/* ============================================
+   PARTICLE SYSTEM
+   ============================================ */
+(function initParticles() {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animFrame;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function getAccentColor() {
+    return getComputedStyle(document.body).getPropertyValue('--accent-1').trim() || '#f97316';
+  }
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 1.5 + 0.3;
+      this.speedX = (Math.random() - 0.5) * 0.4;
+      this.speedY = (Math.random() - 0.5) * 0.4;
+      this.opacity = Math.random() * 0.5 + 0.1;
+      this.color = getAccentColor();
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = this.opacity;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function init() {
+    particles = Array.from({ length: 120 }, () => new Particle());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = getAccentColor();
+          ctx.globalAlpha = (1 - dist / 100) * 0.08;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+      }
+    }
+    animFrame = requestAnimationFrame(animate);
+  }
+
+  window.updateParticleColor = () => {
+    particles.forEach(p => p.color = getAccentColor());
+  };
+
+  window.addEventListener('resize', () => { resize(); init(); });
+  resize(); init(); animate();
+})();
+
+/* ============================================
+   CUSTOM CURSOR
+   ============================================ */
+(function initCursor() {
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+})();
+
+/* ============================================
+   SCROLL REVEAL
+   ============================================ */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ============================================
+   QUOTE CARDS
+   ============================================ */
+function renderQuoteCards() {
+  const grid = document.getElementById('quotesGrid');
+  const shuffled = [...QUOTES].sort(() => Math.random() - 0.5).slice(0, 6);
+  grid.innerHTML = shuffled.map(q => `
+    <div class="quote-card">
+      <p class="quote-text">${q.text}</p>
+      <div class="quote-author">${q.author}</div>
+      <span class="quote-tag">${q.tag}</span>
+    </div>
+  `).join('');
+
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  grid.querySelectorAll('.quote-card').forEach(c => cardObserver.observe(c));
+}
+
+/* ============================================
+   VIDEO CARDS
+   ============================================ */
+function renderVideoCards() {
+  const grid = document.getElementById('videoGrid');
+  grid.innerHTML = VIDEOS.map(v => `
+    <a class="video-card" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener noreferrer">
+      <div class="video-thumb">
+        <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" alt="${v.title}" loading="lazy">
+        <div class="play-overlay">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">${v.title}</div>
+        <div class="video-channel">${v.channel}</div>
+      </div>
+    </a>
+  `).join('');
+}
+
+/* ============================================
+   QUOTE TICKER
+   ============================================ */
+function renderTicker() {
+  const track = document.getElementById('tickerTrack');
+  const items = [...QUOTES, ...QUOTES].map(q =>
+    `<div class="ticker-item">"${q.text}" <span>${q.author}</span></div>`
+  ).join('');
+  track.innerHTML = items;
+}
+
+/* ============================================
+   STATS COUNTER ANIMATION
+   ============================================ */
+function animateCounter(el, target, duration = 1500) {
+  const start = performance.now();
+  const update = (now) => {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target).toLocaleString() + (target === QUOTES.length ? '+' : '+');
+    if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = target + '+';
+  };
+  requestAnimationFrame(update);
+}
+
+const statsObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounter(document.getElementById('countQuotes'), QUOTES.length, 1200);
+      animateCounter(document.getElementById('countVideos'), VIDEOS.length * 10, 1200);
+      statsObserver.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+
+statsObserver.observe(document.querySelector('.stats-section'));
+
+/* ============================================
+   INIT
+   ============================================ */
+renderQuoteCards();
+renderVideoCards();
+renderTicker();
+</script>
+</body>
+</html>
